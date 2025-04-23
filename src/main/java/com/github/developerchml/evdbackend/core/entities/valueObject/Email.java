@@ -1,8 +1,11 @@
 package com.github.developerchml.evdbackend.core.entities.valueObject;
 
+import jakarta.persistence.Embeddable;
+
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+@Embeddable
 public class Email {
     protected String value;
 

@@ -1,22 +1,34 @@
 package com.github.developerchml.evdbackend.core.entities.user;
 
 import com.github.developerchml.evdbackend.core.entities.valueObject.Email;
+import jakarta.persistence.*;
 
+import java.util.Objects;
+
+@Entity
+@Table(name = "users")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
+    @Column(unique = true)
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "email"))
     private Email email;
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private UserStatus status = UserStatus.CREATED;
 
+    @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.DEFAULT;
 
-    public User() {
+    protected User() {
     }
 
     public User(String name, Email email, String password) {
@@ -68,5 +80,28 @@ public class User {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(email);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email=" + email +
+                ", status=" + status +
+                ", role=" + role +
+                '}';
     }
 }
