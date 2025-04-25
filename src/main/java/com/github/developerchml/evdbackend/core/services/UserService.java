@@ -2,6 +2,7 @@ package com.github.developerchml.evdbackend.core.services;
 
 import com.github.developerchml.evdbackend.core.entities.user.User;
 import com.github.developerchml.evdbackend.core.entities.user.UserStatus;
+import com.github.developerchml.evdbackend.core.entities.valueObject.Email;
 import com.github.developerchml.evdbackend.core.mappers.MapperContract;
 import com.github.developerchml.evdbackend.core.mappers.UserMapper;
 import com.github.developerchml.evdbackend.core.repositories.UserRepository;
@@ -10,6 +11,7 @@ import com.github.developerchml.evdbackend.infrastruct.responses.ResponseUserDTO
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserService implements CRUDService<RequestUserDTO, ResponseUserDTO, Long> {
@@ -40,6 +42,7 @@ public class UserService implements CRUDService<RequestUserDTO, ResponseUserDTO,
     @Override
     public ResponseUserDTO save(RequestUserDTO dto) {
         var user = userMapper.toEntity(dto);
+        validateEmailUnique(user.getEmail(), null);
         var newUser = userRepository.save(user);
         return userMapper.toDTO(newUser);
     }
@@ -48,6 +51,7 @@ public class UserService implements CRUDService<RequestUserDTO, ResponseUserDTO,
     public ResponseUserDTO update(Long value, RequestUserDTO dto) {
         User user = find(value);
         User updateUser = userMapper.updateEntity(user, dto);
+        validateEmailUnique(updateUser.getEmail(), user.getId());
         User newUser = userRepository.save(updateUser);
         return userMapper.toDTO(newUser);
     }
@@ -62,5 +66,13 @@ public class UserService implements CRUDService<RequestUserDTO, ResponseUserDTO,
     @Override
     public void forceDelete(Long value) {
         userRepository.delete(find(value));
+    }
+
+    private void validateEmailUnique(String email, Long id) {
+        var user = userRepository.findByEmail(Email.of(email));
+
+        if (user.isPresent() && !Objects.equals(user.get().getId(), id)) {
+            throw new RuntimeException(email + " in use");
+        }
     }
 }

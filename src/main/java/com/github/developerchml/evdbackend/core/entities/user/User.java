@@ -15,9 +15,8 @@ public class User {
 
     private String name;
 
-    @Column(unique = true)
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "email"))
+    @AttributeOverride(name = "value", column = @Column(name = "email", unique = true))
     private Email email;
 
     private String password;
