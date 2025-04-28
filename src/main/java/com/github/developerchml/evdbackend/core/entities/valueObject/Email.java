@@ -1,6 +1,7 @@
 package com.github.developerchml.evdbackend.core.entities.valueObject;
 
 import jakarta.persistence.Embeddable;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -24,7 +25,7 @@ public class Email {
     }
 
     private boolean validate(String value) {
-        return Pattern.matches("^[A-Za-z0-9+_.-]+@(.+)$", value);
+        return StringUtils.hasText(value) && Pattern.matches("^[A-Za-z0-9+_.-]+@(.+)$", value);
     }
 
     @Override
