@@ -1,0 +1,23 @@
+server:
+  port: 8080
+  error:
+    include-stacktrace: on_param
+
+spring:
+  # H2 Client
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  # H2 Connection
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+  # Show SQL
+  jpa:
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

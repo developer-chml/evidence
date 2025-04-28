@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: evidence-backend
+  profiles:
+    active: test
