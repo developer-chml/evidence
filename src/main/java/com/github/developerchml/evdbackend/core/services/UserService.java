@@ -3,9 +3,11 @@ package com.github.developerchml.evdbackend.core.services;
 import com.github.developerchml.evdbackend.core.entities.user.User;
 import com.github.developerchml.evdbackend.core.entities.user.UserStatus;
 import com.github.developerchml.evdbackend.core.entities.valueObject.Email;
+import com.github.developerchml.evdbackend.core.entities.valueObject.Password;
 import com.github.developerchml.evdbackend.core.mappers.MapperContract;
 import com.github.developerchml.evdbackend.core.mappers.UserMapper;
 import com.github.developerchml.evdbackend.core.repositories.UserRepository;
+import com.github.developerchml.evdbackend.infrastruct.requests.RequestUserCredentialDTO;
 import com.github.developerchml.evdbackend.infrastruct.requests.RequestUserDTO;
 import com.github.developerchml.evdbackend.infrastruct.responses.ResponseUserDTO;
 import org.springframework.stereotype.Service;
@@ -77,6 +79,20 @@ public class UserService implements CRUDService<RequestUserDTO, ResponseUserDTO,
     public void block(Long value) {
         User user = find(value);
         user.setStatus(UserStatus.BLOCKED);
+        userRepository.save(user);
+    }
+
+    public void changeCredential(Long value, RequestUserCredentialDTO credentialDTO) {
+        User user = find(value);
+        if (!user.getRole().equals(UserStatus.DELETED.name())) {
+            throw new RuntimeException("Not Found");
+        }
+
+        Password newPassword = Password.of(credentialDTO.password()).validatedPasswordConfirmation(credentialDTO.passwordConfirmation());
+        if (!user.getPassword().equals(Password.of(credentialDTO.currentPassword()).getValue())) {
+            throw new RuntimeException("Try again");
+        }
+        user.setPassword(newPassword.getValue());
         userRepository.save(user);
     }
 
