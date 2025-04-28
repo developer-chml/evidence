@@ -88,4 +88,16 @@ public class Occurrence {
     public void setSoftDelete(LocalDateTime softDelete) {
         this.softDelete = softDelete;
     }
+
+    @Override
+    public String toString() {
+        return "Occurrence{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", occurredAt=" + occurredAt +
+                ", operation=" + this.getOperation() +
+                ", owner=" + this.getOwner() +
+                '}';
+    }
 }
