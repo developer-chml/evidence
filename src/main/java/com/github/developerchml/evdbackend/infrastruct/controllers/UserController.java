@@ -1,6 +1,7 @@
 package com.github.developerchml.evdbackend.infrastruct.controllers;
 
 import com.github.developerchml.evdbackend.core.services.UserService;
+import com.github.developerchml.evdbackend.infrastruct.requests.RequestUserCredentialDTO;
 import com.github.developerchml.evdbackend.infrastruct.requests.RequestUserDTO;
 import com.github.developerchml.evdbackend.infrastruct.responses.ResponseUserDTO;
 import org.springframework.http.ResponseEntity;
@@ -64,6 +65,12 @@ public class UserController implements CRUDController<RequestUserDTO, ResponseUs
     @PatchMapping("/{ucode}/block")
     public ResponseEntity<Void> block(@PathVariable Long ucode) {
         userService.block(ucode);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{ucode}/credential")
+    public ResponseEntity<Void> changeCredential(@PathVariable Long ucode, @RequestBody RequestUserCredentialDTO credentialDTO) {
+        userService.changeCredential(ucode, credentialDTO);
         return ResponseEntity.noContent().build();
     }
 

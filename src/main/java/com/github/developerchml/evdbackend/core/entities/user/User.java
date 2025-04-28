@@ -1,6 +1,7 @@
 package com.github.developerchml.evdbackend.core.entities.user;
 
 import com.github.developerchml.evdbackend.core.entities.valueObject.Email;
+import com.github.developerchml.evdbackend.core.entities.valueObject.Password;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -19,7 +20,9 @@ public class User {
     @AttributeOverride(name = "value", column = @Column(name = "email", unique = true))
     private Email email;
 
-    private String password;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "password"))
+    private Password password;
 
     @Enumerated(EnumType.STRING)
     private UserStatus status = UserStatus.CREATED;
@@ -33,7 +36,7 @@ public class User {
     public User(String name, Email email, String password) {
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.password = Password.of(password);
     }
 
     public Long getId() {
@@ -58,11 +61,11 @@ public class User {
     }
 
     public String getPassword() {
-        return password;
+        return password.getValue();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = Password.of(password);
     }
 
     public String getStatus() {
