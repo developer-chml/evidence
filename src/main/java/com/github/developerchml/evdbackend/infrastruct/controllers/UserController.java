@@ -1,6 +1,5 @@
 package com.github.developerchml.evdbackend.infrastruct.controllers;
 
-import com.github.developerchml.evdbackend.core.services.CRUDService;
 import com.github.developerchml.evdbackend.core.services.UserService;
 import com.github.developerchml.evdbackend.infrastruct.requests.RequestUserDTO;
 import com.github.developerchml.evdbackend.infrastruct.responses.ResponseUserDTO;
@@ -12,16 +11,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController implements CRUDController<RequestUserDTO, ResponseUserDTO, Long> {
-    private final CRUDService<RequestUserDTO, ResponseUserDTO, Long> userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/{value}")
+    @GetMapping("/{ucode}")
     @Override
-    public ResponseEntity<ResponseUserDTO> findById(@PathVariable Long value) {
-        return ResponseEntity.ok(userService.findById(value));
+    public ResponseEntity<ResponseUserDTO> findById(@PathVariable Long ucode) {
+        return ResponseEntity.ok(userService.findById(ucode));
     }
 
     @GetMapping
@@ -36,23 +35,35 @@ public class UserController implements CRUDController<RequestUserDTO, ResponseUs
         return ResponseEntity.ok(userService.save(dto));
     }
 
-    @PutMapping("/{value}")
+    @PutMapping("/{ucode}")
     @Override
-    public ResponseEntity<ResponseUserDTO> update(@PathVariable Long value, @RequestBody RequestUserDTO dto) {
-        return ResponseEntity.ok(userService.update(value, dto));
+    public ResponseEntity<ResponseUserDTO> update(@PathVariable Long ucode, @RequestBody RequestUserDTO dto) {
+        return ResponseEntity.ok(userService.update(ucode, dto));
     }
 
-    @DeleteMapping("/{value}")
+    @DeleteMapping("/{ucode}")
     @Override
-    public ResponseEntity<Void> softDelete(@PathVariable Long value) {
-        userService.softDelete(value);
+    public ResponseEntity<Void> softDelete(@PathVariable Long ucode) {
+        userService.softDelete(ucode);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/force-delete/{value}")
+    @DeleteMapping("/{ucode}/force-delete")
     @Override
-    public ResponseEntity<Void> forceDelete(@PathVariable Long value) {
-        userService.forceDelete(value);
+    public ResponseEntity<Void> forceDelete(@PathVariable Long ucode) {
+        userService.forceDelete(ucode);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{ucode}/activate")
+    public ResponseEntity<Void> activate(@PathVariable Long ucode) {
+        userService.activate(ucode);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{ucode}/block")
+    public ResponseEntity<Void> block(@PathVariable Long ucode) {
+        userService.block(ucode);
         return ResponseEntity.noContent().build();
     }
 

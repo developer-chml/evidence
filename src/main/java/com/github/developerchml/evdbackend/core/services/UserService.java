@@ -68,6 +68,18 @@ public class UserService implements CRUDService<RequestUserDTO, ResponseUserDTO,
         userRepository.delete(find(value));
     }
 
+    public void activate(Long value) {
+        User user = find(value);
+        user.setStatus(UserStatus.ACTIVE);
+        userRepository.save(user);
+    }
+
+    public void block(Long value) {
+        User user = find(value);
+        user.setStatus(UserStatus.BLOCKED);
+        userRepository.save(user);
+    }
+
     private void validateEmailUnique(String email, Long id) {
         var user = userRepository.findByEmail(Email.of(email));
 

@@ -16,6 +16,6 @@ public enum UserStatus {
                 return s;
             }
         }
-        throw new RuntimeException();
+        throw new RuntimeException(str + " is invalid");
     }
 }
