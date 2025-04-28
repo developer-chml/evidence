@@ -27,6 +27,9 @@ public class OccurrenceMapper implements MapperContract<Occurrence, RequestOccur
         if (Objects.nonNull(dto.title())){
             entity.setTitle(dto.title());
         }
+        if (Objects.nonNull(dto.description())){
+            entity.setDescription(dto.description());
+        }
         if (Objects.nonNull(dto.occurredAt())){
             entity.setOccurredAt(LocalDate.parse(dto.occurredAt()));
         }
