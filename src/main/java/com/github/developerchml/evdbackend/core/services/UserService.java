@@ -1,6 +1,7 @@
 package com.github.developerchml.evdbackend.core.services;
 
 import com.github.developerchml.evdbackend.core.entities.user.User;
+
 import com.github.developerchml.evdbackend.core.entities.user.UserRole;
 import com.github.developerchml.evdbackend.core.entities.user.UserStatus;
 import com.github.developerchml.evdbackend.core.entities.valueObject.Email;
@@ -8,6 +9,7 @@ import com.github.developerchml.evdbackend.core.entities.valueObject.Password;
 import com.github.developerchml.evdbackend.core.mappers.MapperContract;
 import com.github.developerchml.evdbackend.core.mappers.UserMapper;
 import com.github.developerchml.evdbackend.core.repositories.UserRepository;
+
 import com.github.developerchml.evdbackend.exceptions.NotAdminException;
 import com.github.developerchml.evdbackend.exceptions.NotFoundException;
 import com.github.developerchml.evdbackend.exceptions.ValidateUniqueException;
@@ -88,6 +90,7 @@ public class UserService implements CRUDService<RequestUserDTO, ResponseUserDTO,
 
     public void changeCredential(Long value, RequestUserCredentialDTO credentialDTO) {
         User user = find(value);
+      
         if (user.getStatus().equals(UserStatus.DELETED.name())) {
             throw new NotFoundException("Usuário(" + value + ") está deletado.");
         }

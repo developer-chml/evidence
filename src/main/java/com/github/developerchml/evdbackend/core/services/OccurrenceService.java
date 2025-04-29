@@ -6,8 +6,10 @@ import com.github.developerchml.evdbackend.core.mappers.MapperContract;
 import com.github.developerchml.evdbackend.core.mappers.OccurrenceMapper;
 import com.github.developerchml.evdbackend.core.repositories.OccurrenceRepository;
 import com.github.developerchml.evdbackend.core.repositories.UserRepository;
+
 import com.github.developerchml.evdbackend.exceptions.NotFoundException;
 import com.github.developerchml.evdbackend.exceptions.ValidateUniqueException;
+
 import com.github.developerchml.evdbackend.infrastruct.requests.RequestOccurrenceDTO;
 import com.github.developerchml.evdbackend.infrastruct.responses.ResponseOccurrenceDTO;
 import org.springframework.stereotype.Service;
