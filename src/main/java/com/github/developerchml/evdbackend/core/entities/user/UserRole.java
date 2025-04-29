@@ -1,5 +1,7 @@
 package com.github.developerchml.evdbackend.core.entities.user;
 
+import com.github.developerchml.evdbackend.exceptions.NotFoundException;
+
 public enum UserRole {
     DEFAULT,
     GUEST,
@@ -15,6 +17,6 @@ public enum UserRole {
                 return s;
             }
         }
-        throw new RuntimeException();
+        throw new NotFoundException(str + " não localizado.");
     }
 }
