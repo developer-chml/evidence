@@ -1,5 +1,7 @@
 package com.github.developerchml.evdbackend.core.entities.user;
 
+import com.github.developerchml.evdbackend.exceptions.NotFoundException;
+
 public enum UserStatus {
     ACTIVE,
     CREATED,
@@ -16,6 +18,6 @@ public enum UserStatus {
                 return s;
             }
         }
-        throw new RuntimeException(str + " is invalid");
+        throw new NotFoundException(str + " não localizado.");
     }
 }

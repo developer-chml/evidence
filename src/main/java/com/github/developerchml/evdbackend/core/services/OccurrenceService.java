@@ -6,6 +6,8 @@ import com.github.developerchml.evdbackend.core.mappers.MapperContract;
 import com.github.developerchml.evdbackend.core.mappers.OccurrenceMapper;
 import com.github.developerchml.evdbackend.core.repositories.OccurrenceRepository;
 import com.github.developerchml.evdbackend.core.repositories.UserRepository;
+import com.github.developerchml.evdbackend.exceptions.NotFoundException;
+import com.github.developerchml.evdbackend.exceptions.ValidateUniqueException;
 import com.github.developerchml.evdbackend.infrastruct.requests.RequestOccurrenceDTO;
 import com.github.developerchml.evdbackend.infrastruct.responses.ResponseOccurrenceDTO;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,7 @@ public class OccurrenceService implements CRUDService<RequestOccurrenceDTO, Resp
 
     @Override
     public <Occurrence> Occurrence find(Long value) {
-        return (Occurrence) occurrenceRepository.findById(value).orElseThrow(() -> new RuntimeException("Not Found"));
+        return (Occurrence) occurrenceRepository.findById(value).orElseThrow(() -> new NotFoundException("Ocorrência(" + value + ") não localizada."));
     }
 
     @Override
@@ -59,9 +61,6 @@ public class OccurrenceService implements CRUDService<RequestOccurrenceDTO, Resp
     public ResponseOccurrenceDTO update(Long value, RequestOccurrenceDTO dto) {
         validateUnique(dto,value);
         Occurrence occurrence = find(value);
-        if(occurrence.getSoftDelete() != null){
-            throw new RuntimeException("Not Found");
-        }
 
         Occurrence updateOccurrence = occurrenceMapper.updateEntity(occurrence, dto);
 
@@ -91,7 +90,7 @@ public class OccurrenceService implements CRUDService<RequestOccurrenceDTO, Resp
         var occurrence = occurrenceRepository.findByTitleAndOccurredAtAndOperation(dto.title(), LocalDate.parse(dto.occurredAt()), Operation.toEnum(dto.operation()));
 
         if (occurrence.isPresent() && occurrence.get().getSoftDelete() == null && !Objects.equals(occurrence.get().getId(), value)) {
-            throw new RuntimeException(occurrence.get() + " already exists");
+            throw new ValidateUniqueException("Ocorrência já foi registrada por " + occurrence.get().getOwner() + " em " + occurrence.get().getOccurredAt());
         }
 
         if (occurrence.isPresent() && occurrence.get().getSoftDelete() != null) {

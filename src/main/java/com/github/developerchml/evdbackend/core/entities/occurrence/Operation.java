@@ -1,5 +1,7 @@
 package com.github.developerchml.evdbackend.core.entities.occurrence;
 
+import com.github.developerchml.evdbackend.exceptions.NotFoundException;
+
 public enum Operation {
     IN,
     OUT,
@@ -15,6 +17,6 @@ public enum Operation {
                 return s;
             }
         }
-        throw new RuntimeException(str + " is invalid");
+        throw new NotFoundException(str + " não localizado.");
     }
 }
