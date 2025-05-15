@@ -3,6 +3,10 @@ server:
   error:
     include-stacktrace: on_param
 
+# noinspection undefined
+file:
+  upload-dir: /evdstorage
+
 spring:
   # H2 Client
   h2:
@@ -17,7 +21,11 @@ spring:
   # Show SQL
   jpa:
     open-in-view: false
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
+
