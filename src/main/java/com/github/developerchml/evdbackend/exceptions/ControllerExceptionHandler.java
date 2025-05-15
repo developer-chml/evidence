@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.Map;
+import java.util.Objects;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
@@ -21,9 +23,22 @@ public class ControllerExceptionHandler {
         return problemDetail;
     }
 
+    private ProblemDetail defineProblemDetailError(FileNotAcceptedException e) {
+        ProblemDetail problemDetail = defineProblemDetail(e);
+        if(Objects.nonNull(e.getErrors()) && !e.getErrors().isEmpty())
+            problemDetail.setProperties(Map.of("errors",e.getErrors()));
+        return problemDetail;
+    }
+
     private HttpStatus getResponseStatus(CustomException ex) {
         ResponseStatus responseStatus = ex.getClass().getAnnotation(ResponseStatus.class);
         return responseStatus == null ? httpStatus : responseStatus.value();
+    }
+
+    @ExceptionHandler(FileNotAcceptedException.class)
+    public ResponseEntity<ProblemDetail> fileNotAcceptedExceptionHandler(FileNotAcceptedException ex) {
+        httpStatus = getResponseStatus(ex);
+        return ResponseEntity.status(httpStatus).body(defineProblemDetailError(ex));
     }
 
     @ExceptionHandler(CustomException.class)
