@@ -6,15 +6,31 @@ import java.util.List;
 
 public interface CRUDController<REQ extends Record, RES extends Record, ID> {
 
-    ResponseEntity<RES> findById(ID value);
+    default ResponseEntity<RES> findById(ID value) {
+        return null;
+    }
 
-    ResponseEntity<List<RES>> listAll();
+    default ResponseEntity<List<RES>> listAll() {
+        return null;
+    }
 
-    ResponseEntity<RES> save(REQ dto);
+    default ResponseEntity<RES> save(REQ dto) {
+        return null;
+    }
 
-    ResponseEntity<RES> update(ID value, REQ dto);
+    default ResponseEntity<RES> update(ID value, REQ dto) {
+        return null;
+    }
 
-    ResponseEntity<Void> softDelete(ID value);
+    default ResponseEntity<Void> softDelete(ID value) {
+        return ResponseEntity.noContent().build();
+    }
 
-    ResponseEntity<Void> forceDelete(ID value);
+    default ResponseEntity<Void> recoverSoftDelete(ID value) {
+        return ResponseEntity.noContent().build();
+    }
+
+    default ResponseEntity<Void> forceDelete(ID value) {
+        return ResponseEntity.noContent().build();
+    }
 }

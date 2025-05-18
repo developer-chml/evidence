@@ -4,7 +4,9 @@ import java.util.List;
 
 public interface MapperContract<T, REQ, RES> {
 
-    T toEntity(REQ dto);
+    default T toEntity(REQ dto) {
+        return null;
+    }
 
     RES toDTO(T entity);
 

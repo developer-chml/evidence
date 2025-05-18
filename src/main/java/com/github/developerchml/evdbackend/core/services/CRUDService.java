@@ -6,15 +6,31 @@ public interface CRUDService<REQ extends Record, RES extends Record, ID> {
 
     <T> T find(ID value);
 
-    RES findById(ID value);
+    default RES findById(ID value) {
+        return null;
+    }
 
-    List<RES> listAll();
+    default List<RES> listAll() {
+        return null;
+    }
 
-    RES save(REQ dto);
+    default RES save(REQ dto) {
+        return null;
+    }
 
-    RES update(ID value, REQ dto);
+    default RES update(ID value, REQ dto) {
+        return null;
+    }
 
-    void softDelete(ID value);
+    default void softDelete(ID value) {
 
-    void forceDelete(ID value);
+    }
+
+    default void forceDelete(ID value) {
+
+    }
+
+    default void recoverSoftDelete(ID value) {
+
+    }
 }
