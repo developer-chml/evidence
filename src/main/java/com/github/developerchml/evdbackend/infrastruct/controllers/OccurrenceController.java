@@ -1,10 +1,12 @@
 package com.github.developerchml.evdbackend.infrastruct.controllers;
 
+import com.github.developerchml.evdbackend.core.entities.proofs.Proof;
 import com.github.developerchml.evdbackend.core.services.OccurrenceService;
 import com.github.developerchml.evdbackend.infrastruct.requests.RequestOccurrenceDTO;
 import com.github.developerchml.evdbackend.infrastruct.responses.ResponseOccurrenceDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,7 +35,6 @@ public class OccurrenceController implements CRUDController<RequestOccurrenceDTO
     @PostMapping
     @Override
     public ResponseEntity<ResponseOccurrenceDTO> save(@RequestBody RequestOccurrenceDTO dto) {
-        System.out.println(dto);
         return ResponseEntity.ok(occurrenceService.save(dto));
     }
 
@@ -55,5 +56,28 @@ public class OccurrenceController implements CRUDController<RequestOccurrenceDTO
     public ResponseEntity<Void> forceDelete(@PathVariable Long id) {
         occurrenceService.forceDelete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/recover")
+    public ResponseEntity<Void> recoverSoftDelete(@PathVariable Long id) {
+        occurrenceService.recoverSoftDelete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/proofs/single")
+    public ResponseEntity<?> saveProof(@PathVariable Long id, @RequestParam("file") MultipartFile file){
+        occurrenceService.saveProof(id, file);
+        return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/{id}/proofs/multiple")
+    public ResponseEntity<?> saveProofs(@PathVariable Long id, @RequestParam("files") MultipartFile[] files){
+        occurrenceService.saveProofs(id, files);
+        return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/{id}/proofs")
+    public ResponseEntity<List<Proof>> getProofs(@PathVariable Long id) {
+        return ResponseEntity.accepted().body(occurrenceService.proofs(id));
     }
 }

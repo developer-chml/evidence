@@ -1,10 +1,13 @@
 package com.github.developerchml.evdbackend.core.entities.occurrence;
 
+import com.github.developerchml.evdbackend.core.entities.proofs.Proof;
 import com.github.developerchml.evdbackend.core.entities.user.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "occurrences")
@@ -24,6 +27,9 @@ public class Occurrence {
 
     @ManyToOne
     private User owner;
+
+    @OneToMany(mappedBy = "occurrence", fetch = FetchType.EAGER , cascade = CascadeType.REMOVE)
+    private List<Proof> proofs;
 
     private LocalDateTime softDelete;
 
@@ -87,6 +93,14 @@ public class Occurrence {
 
     public void setSoftDelete(LocalDateTime softDelete) {
         this.softDelete = softDelete;
+    }
+
+    public void setProofs(List<Proof> proofs) {
+        this.proofs = proofs;
+    }
+
+    public List<Proof> getProofs() {
+        return Objects.isNull(this.softDelete) ? proofs : List.of();
     }
 
     @Override
